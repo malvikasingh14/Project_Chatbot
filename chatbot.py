@@ -13,15 +13,15 @@ words = pickle.load(open('words.pkl','rb'))
 classes = pickle.load(open('classes.pkl','rb'))
 
 
-def clean_up_sentence(sentence):
+def cleanupsentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
     return sentence_words
 
-# return bag of words array: 0 or 1 for each word in the bag that exists in the sentence
+# return  words array: 0 or 1 for word that exists in the sentence
 
-def bow(sentence, words, show_details=True):
-    sentence_words = clean_up_sentence(sentence)
+def wor(sentence, words, show_details=True):
+    sentence_words = cleanupsentence(sentence)
     bag = [0]*len(words)
     for s in sentence_words:
         for i,w in enumerate(words):
@@ -31,8 +31,8 @@ def bow(sentence, words, show_details=True):
                     print ("found in bag: %s" % w)
     return(np.array(bag))
 
-def predict_class(sentence, model):
-    p = bow(sentence, words,show_details=False)
+def predictclass(sentence, model):
+    p = wor(sentence, words,show_details=False)
     res = model.predict(np.array([p]))[0]
     ERROR_THRESHOLD = 0.25
     results = [[i,r] for i,r in enumerate(res) if r>ERROR_THRESHOLD]
@@ -42,7 +42,7 @@ def predict_class(sentence, model):
         return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     return return_list
 
-def getResponse(ints, intents_json):
+def getRes(ints, intents_json):
     tag = ints[0]['intent']
     list_of_intents = intents_json['intents']
     for i in list_of_intents:
@@ -52,8 +52,8 @@ def getResponse(ints, intents_json):
     return result
 
 def chatbot_response(msg):
-    ints = predict_class(msg, model)
-    res = getResponse(ints, intents)
+    ints = predictclass(msg, model)
+    res = getRes(ints, intents)
     return res
 
 
@@ -80,14 +80,14 @@ def send():
 #creating main window object
 base = Tk()
 base.title("chatbox")
-base.geometry("420x500")
+base.geometry("400x470")
 base.resizable(width=FALSE, height=FALSE)
 
 #Create Chat window
 ChatLog = Text(base, bd=0, bg="black", height="8", width="50", font="Arial",)
 ChatLog.config(state=NORMAL)
 ChatLog.insert(END, "Welcome, Dear user"+'\n\n')
-ChatLog.config(foreground="#ffffff", font=("Verdana", 12 ))
+ChatLog.config(foreground="#ffffff", font=("Calibre", 12 ))
 
 ChatLog.config(state=DISABLED)
 
@@ -96,19 +96,19 @@ scrollbar = Scrollbar(base, command=ChatLog.yview, cursor="heart")
 ChatLog['yscrollcommand'] = scrollbar.set
 
 #Create Button to send message
-SendButton = Button(base, font=("Verdana",12,'bold'), text="Send", width="10", height=2,
+SendButton = Button(base, font=("Calibre",12,'bold'), text="Send", width="10", height=2,
                     bd=0, bg="#340a8a", activebackground="#40f7f4",fg='#ffffff',
                     command= send )
 
 #Create the box to enter message
-EntryBox = Text(base, bd=0, bg="white",width="20", height="2", font="Arial")
+EntryBox = Text(base, bd=0, bg="white",width="15", height="2", font="Calibre")
 #EntryBox.bind("<Return>", send)
 
 
 #Place all components on the screen
 scrollbar.place(x=376,y=6, height=386)
 ChatLog.place(x=6,y=6, height=386, width=370)
-EntryBox.place(x=128, y=401, height=90, width=265)
-SendButton.place(x=6, y=401, height=90)
+EntryBox.place(x=6, y=401, height=60, width=265)
+SendButton.place(x=270, y=401, height=60)
 
 base.mainloop()
