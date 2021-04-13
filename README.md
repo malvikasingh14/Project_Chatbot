@@ -1,6 +1,6 @@
 # Project_Chatbot
 A very basic bot for chatting 
- ### **_Project Chatbot_**
+
 CAUTION: Please run the project only in virtual environment as version dependence may vary
 
 ### Direct command line to project directory if using vscode run the commands in the terminal or run the commands one at a time (Steps to create a virtual environment)
